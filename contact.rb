@@ -15,7 +15,7 @@ class Contact
     [@name, @email]
   end
  
- @list_of_contacts = []
+ 
 
   ## Class Methods
   class << self
@@ -31,15 +31,19 @@ class Contact
       # end
     end
  
-    def find(index)
-      i = 0
-       CSV.foreach('contacts.csv') do |row|
-        if i == index
-          puts "#{i}: #{row[0]}, #{row[1]}" 
-          return 
+    def find(search_term)
+      # list_of_contacts = CSV.read('contacts.csv')
+      # list_of_contacts.each do |row|
+      #   if row.select {|s| s.include? search_term}
+      #     puts row
+      #   end
+      # end
+
+      CSV.foreach('contacts.csv') do |row|
+        if row[0].include?(search_term) || row[1].include?(search_term)
+          puts "#{row[0]}, #{row[1]}"
         end
-        i += 1
-      end 
+      end
     end
  
     def all
@@ -58,8 +62,15 @@ class Contact
       # end
     end
     
-    def show(id)
-      # TODO: Show a contact, based on ID
+    def show(index)
+      i = 0
+       CSV.foreach('contacts.csv') do |row|
+        if i == index
+          puts "#{i}: #{row[0]}, #{row[1]}" 
+          return 
+        end
+        i += 1
+      end 
     end
     
   end

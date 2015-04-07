@@ -14,9 +14,15 @@ class ContactList
   def self.get_input
     gets.chomp
   end
-    def self.input_for_id
+
+  def self.input_for_id
     puts "what is the id number?"
-    Contact.find(self.get_input.to_i)
+    Contact.show(self.get_input.to_i)
+  end
+
+  def self.input_for_search
+    puts "enter search term"
+    Contact.find(self.get_input)
   end
 
   def self.input_for_new_contact
@@ -27,7 +33,7 @@ class ContactList
     Contact.create(contact_name, contact_email)
   end
 
-  def self.menu_select (selection)
+  def self.menu_select(selection)
     
     case selection
     when 'new'
@@ -37,9 +43,11 @@ class ContactList
       Contact.all
 
     when 'show'
+      ContactList.input_for_id
 
     when 'find'
-      ContactList.input_for_id
+      ContactList.input_for_search
+      
     end
   end
 
