@@ -3,6 +3,9 @@ require_relative 'contact_database'
 
 class ContactList
 
+  @command = ARGV[0]
+  @second_command = ARGV[1]
+
   def self.menu
     puts "Here is a list of available commands:
     new  - Create a new contact
@@ -12,18 +15,9 @@ class ContactList
   end
   
   def self.get_input
-    gets.chomp
+    STDIN.gets.chomp
   end
 
-  def self.input_for_id
-    puts "what is the id number?"
-    Contact.show(self.get_input.to_i)
-  end
-
-  def self.input_for_search
-    puts "enter search term"
-    Contact.find(self.get_input)
-  end
 
   def self.input_for_new_contact
     puts "what is the contact's name?"
@@ -33,9 +27,10 @@ class ContactList
     Contact.create(contact_name, contact_email)
   end
 
-  def self.menu_select(selection)
+  def self.menu_select
     
-    case selection
+    case @command
+
     when 'new'
       ContactList.input_for_new_contact
 
@@ -43,17 +38,17 @@ class ContactList
       Contact.all
 
     when 'show'
-      ContactList.input_for_id
+      Contact.show(@second_command.to_i)
 
     when 'find'
-      ContactList.input_for_search
+      Contact.find(@second_command)
       
     end
   end
 
 end
-ContactList.menu
-ContactList.menu_select(ContactList.get_input)
+#ContactList.menu
+ContactList.menu_select
 
 #puts bob = Contact.create('Bob', 'bob@computer')
 

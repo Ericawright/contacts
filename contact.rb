@@ -24,7 +24,7 @@ class Contact
       # @list_of_contacts << {name: name, email: email}
       # TODO: Will initialize a contact as well as add it to the list of contacts
       CSV.open('contacts.csv', 'a') do |csv_object|
-          csv_object.add_row(new_contact.to_array)
+          csv_object << new_contact.to_array
       end
       #   CSV.open('contacts.csv', 'r') do |csv_object|
           
@@ -32,13 +32,6 @@ class Contact
     end
  
     def find(search_term)
-      # list_of_contacts = CSV.read('contacts.csv')
-      # list_of_contacts.each do |row|
-      #   if row.select {|s| s.include? search_term}
-      #     puts row
-      #   end
-      # end
-
       CSV.foreach('contacts.csv') do |row|
         if row[0].include?(search_term) || row[1].include?(search_term)
           puts "#{row[0]}, #{row[1]}"
