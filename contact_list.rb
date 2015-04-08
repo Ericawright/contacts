@@ -1,11 +1,13 @@
 require 'csv'
 require_relative 'contact'
 require_relative 'contact_database'
+require_relative 'phone_number'
 
 class ContactList
 
   @command = ARGV[0]
   @second_command = ARGV[1]
+  #@numbers = []
 
   class << self
 
@@ -22,28 +24,43 @@ class ContactList
     end
 
     def input_for_new_contact
-      puts "what is the contact's name?"
+      numbers = []
+      puts "What is the contact's name?"
       contact_name =  self.get_input
-      puts "what is the contact's email?"
+      puts "What is the contact's email?"
       contact_email = self.get_input
-      puts Contact.create(contact_name, contact_email)
+      begin
+        puts 'Do you want to enter a phone number? (y/n)'
+        if STDIN.gets.chomp.downcase == 'y'
+          phone = true
+          puts 'Enter the type'
+          type = STDIN.gets.chomp
+          puts 'Enter the number'
+          digits = STDIN.gets.chomp
+          numbers << PhoneNumber.new(type, digits)
+          puts numbers.class
+          puts numbers
+        else
+          phone = false
+        end
+      end while phone == true
+      puts Contact.create(contact_name, contact_email, numbers)
     end
+
+
+   
 
     def menu_select
       
       case @command
       when 'new'
         ContactList.input_for_new_contact
-     
       when 'list'
         puts Contact.all
-
       when 'show'
         puts Contact.show(@second_command.to_i)
-
       when 'find'
         puts Contact.find(@second_command)
-     
       else
         puts 'invalid command'
         ContactList.menu
@@ -51,6 +68,7 @@ class ContactList
     end
   end
 end
+Contact.init
 ContactList.menu_select
 
 
