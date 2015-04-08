@@ -3,7 +3,7 @@ require_relative 'contact'
 require_relative 'contact_database'
 require_relative 'phone_number'
 
-class ContactList
+class ContactListMenu
 
   @command = ARGV[0]
   @second_command = ARGV[1]
@@ -54,7 +54,7 @@ class ContactList
       
       case @command
       when 'new'
-        ContactList.input_for_new_contact
+        ContactListMenu.input_for_new_contact
       when 'list'
         puts Contact.all
       when 'show'
@@ -63,12 +63,12 @@ class ContactList
         puts Contact.find(@second_command)
       else
         puts 'invalid command'
-        ContactList.menu
+        ContactListMenu.menu
       end
     end
   end
 end
 Contact.init
-ContactList.menu_select
+ContactListMenu.menu_select
 
 

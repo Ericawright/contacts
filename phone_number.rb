@@ -7,7 +7,7 @@ class PhoneNumber
   end
 
   def to_s
-    "#{@type}: #{@digits}"
+    " #{@type}: #{@digits}"
   end
 
 end

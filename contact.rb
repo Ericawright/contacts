@@ -9,7 +9,7 @@ class Contact
   end
  
   def to_s
-    message = "#{name},#{email}"
+    message = " #{name},#{email}"
     phone_number.each do |phone|
       message << phone.to_s
     end
@@ -37,8 +37,6 @@ class Contact
           digits = @parts[1]
           phones << PhoneNumber.new(type, digits)
         end
-        # puts phones
-        # populate_all << "#{real_ind}: #{row[0]} #{row[1]} #{phones}"
         @@list_of_contacts << Contact.new(name, email, phones)
       end
     end
@@ -65,39 +63,25 @@ class Contact
     def find(search_term)
       populate_array = []
       @@list_of_contacts.each_with_index do |row, real_ind|
-        if row[0].include?(search_term) || row[1].include?(search_term)
-          populate_array << "#{real_ind}: #{row[0]}, #{row[1]}"
+        if row.name.include?(search_term) || row.email.include?(search_term)
+          populate_array << "#{real_ind+1}: #{row}"
         end
       end
       populate_array
     end
  
     def all
-      @@list_of_contacts
-      # populate_all = []
-
-      # phones = []
-      # @@list_of_contacts.each_with_index do |row, real_ind|
-      #   row.each_with_index do |str, i|
-      #     @name = str[0]
-      #     @email = str[1]
-      #     if i >= 2 
-      #       @parts = str.split(":")
-      #       type = @parts[0]
-      #       digits = @parts[1]
-      #       phones << PhoneNumber.new(type, digits)
-      #     end
-      #   end
-      #   # puts phones
-      #   # populate_all << "#{real_ind}: #{row[0]} #{row[1]} #{phones}"
-      #   puts Contact.new(@name, @email, phones).to_string
-      # end
+      populate_array = []
+      @@list_of_contacts.each_with_index do |row, real_ind|
+        populate_array << "#{real_ind+1}: #{row}"
+      end
+      populate_array
     end
     
     def show(index)
        @@list_of_contacts.each_with_index do |row, real_ind|
-        if real_ind == index
-          return"#{real_ind}: #{row[0]}, #{row[1]}" 
+        if real_ind == index-1
+          return"#{real_ind+1}: #{row}" 
         end 
       end 
       return "Contact does not exist"
