@@ -7,7 +7,6 @@ class ContactListMenu
 
   @command = ARGV[0]
   @second_command = ARGV[1]
-  #@numbers = []
 
   class << self
 

@@ -1,3 +1,5 @@
+require 'pg'
+
 class Contact
  
   attr_accessor :name, :email, :phone_number
@@ -17,7 +19,7 @@ class Contact
   end
   
   def to_array
-    [@name, @email, @phone_number]#.reject{ |e| e.empty? }
+    [@name, @email, @phone_number]
   end
  
  
@@ -39,6 +41,22 @@ class Contact
         end
         @@list_of_contacts << Contact.new(name, email, phones)
       end
+    end
+
+    def connection
+      conn = PG.connect(
+        dbname: 'd9sv67tflremhi',
+        port: 5432,
+        user: 'nzgklrreikspna',
+        host: 'ec2-54-163-225-82.compute-1.amazonaws.com',
+        password: 'w4CQheonjCXxDLM38rMpSaS5rl'
+      )
+     #  conn.exec( "SELECT * FROM contacts" ) do |results|
+     #    results.each do |contact|
+     #      puts contact.inspect
+     #    end
+     # end
+
     end
 
     def create(name, email, phone_number=[])
@@ -88,6 +106,8 @@ class Contact
     end 
   end
 end
+
+Contact.connection
 
 
 
