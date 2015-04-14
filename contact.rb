@@ -13,11 +13,28 @@ class Contact
   end
  
   def to_s
-    message = "#{id}: #{first_name}, #{last_name}, #{email}"
+    message = "#{id}: #{first_name} #{last_name}, #{email},"
     phone_number.each do |phone|
       message << phone.to_s
     end
     message
+  end
+
+  def save
+    if @id == nil
+      alt_phone = []
+      @phone_number.each do |obj|
+        alt_phone << obj.to_s
+      end
+      sql = "INSERT INTO contacts(first_name, last_name, email, phone_number) VALUES ($1, $2, $3, $4) RETURNING *"
+      results = ContactDatabase.connection.exec_params(sql, [@first_name, @last_name, @email, alt_phone.join(',')])
+      @id = results[0]["id"]
+      puts 'saved'
+    else
+      sql = "UPDATE contacts SET first_name = $1, last_name = $2, email = $3, phone_number = $4 WHERE id=$5"
+      ContactDatabase.connection.exec_params(sql, [@first_name, @last_name, @email, @phone_number, @id])
+      puts 'updated'
+    end   
   end
   
   # def to_array
@@ -55,7 +72,7 @@ class Contact
       end
       new_contact = Contact.new(first_name, last_name, email)
       new_contact.phone_number = phone_number
-      return 'success'
+      new_contact.save
     end
 
     def find(search_term)
@@ -74,9 +91,7 @@ class Contact
     
     def show(index)
        @@list_of_contacts.each do |obj|
-        if obj.id == index
-          return obj 
-        end 
+          return obj if obj.id == index
       end 
       return "Contact does not exist"
     end 
