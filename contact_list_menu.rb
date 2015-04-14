@@ -1,4 +1,5 @@
-require 'csv'
+# require 'csv'
+require 'pg'
 require_relative 'contact'
 require_relative 'contact_database'
 require_relative 'phone_number'
@@ -24,8 +25,10 @@ class ContactListMenu
 
     def input_for_new_contact
       numbers = []
-      puts "What is the contact's name?"
-      contact_name =  self.get_input
+      puts "What is the contact's first name?"
+      first_name =  self.get_input
+      puts "What is the contact's last name?"
+      last_name = self.get_input
       puts "What is the contact's email?"
       contact_email = self.get_input
       begin
@@ -37,17 +40,13 @@ class ContactListMenu
           puts 'Enter the number'
           digits = STDIN.gets.chomp
           numbers << PhoneNumber.new(type, digits)
-          puts numbers.class
-          puts numbers
         else
           phone = false
         end
       end while phone == true
-      puts Contact.create(contact_name, contact_email, numbers)
+      puts Contact.create(first_name, last_name, contact_email, numbers)
     end
 
-
-   
 
     def menu_select
       
@@ -55,11 +54,7 @@ class ContactListMenu
       when 'new'
         ContactListMenu.input_for_new_contact
       when 'list'
-        conn= ContactDatabase.connection.exec('SELECT * FROM contacts;')
-        conn.each do |one|
-          puts one
-        end 
-        conn.close
+        puts Contact.all
       when 'show'
         puts Contact.show(@second_command.to_i)
       when 'find'
@@ -71,7 +66,7 @@ class ContactListMenu
     end
   end
 end
-#ContactDatabase.connection.exec('SELECT * FROM contacts;')
+
 Contact.init
 ContactListMenu.menu_select
 

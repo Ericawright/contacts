@@ -13,4 +13,3 @@ class ContactDatabase
   end
 end
 
-#ContactDatabase::conn.exec()
