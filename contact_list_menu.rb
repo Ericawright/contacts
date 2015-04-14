@@ -55,7 +55,11 @@ class ContactListMenu
       when 'new'
         ContactListMenu.input_for_new_contact
       when 'list'
-        puts Contact.all
+        conn= ContactDatabase.connection.exec('SELECT * FROM contacts;')
+        conn.each do |one|
+          puts one
+        end 
+        conn.close
       when 'show'
         puts Contact.show(@second_command.to_i)
       when 'find'
@@ -67,6 +71,7 @@ class ContactListMenu
     end
   end
 end
+#ContactDatabase.connection.exec('SELECT * FROM contacts;')
 Contact.init
 ContactListMenu.menu_select
 
