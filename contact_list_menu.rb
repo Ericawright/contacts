@@ -1,6 +1,6 @@
 
 require 'pg'
-require_relative 'orm'
+
 require_relative 'contact'
 require_relative 'contact_database'
 require_relative 'phone_number'
@@ -65,7 +65,7 @@ class ContactListMenu
         current = Contact.show(@second_command.to_i)
         current.destroy
       when 'update'
-        current = Contact.show(@second_command.to_i)
+        puts current = Contact.show(@second_command.to_i)
         ContactListMenu.input_for_contact
         current.update(@temp_first_name, @temp_last_name, @temp_contact_email, @numbers)
 

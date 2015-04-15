@@ -1,6 +1,6 @@
 # require 'pg'
 
-class Contact < ORM
+class Contact
  
   attr_accessor :first_name, :last_name, :email, :phone_number, :id
   
