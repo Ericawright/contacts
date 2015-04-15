@@ -1,6 +1,6 @@
 # require 'pg'
 
-class Contact
+class Contact < ORM
  
   attr_accessor :first_name, :last_name, :email, :phone_number, :id
   
@@ -14,32 +14,41 @@ class Contact
  
   def to_s
     message = "#{id}: #{first_name} #{last_name}, #{email},"
-    phone_number.each do |phone|
+    @phone_number.each do |phone|
       message << phone.to_s
     end
     message
   end
 
   def save
+    alt_phone = []
+    @phone_number.each do |obj|
+      alt_phone << obj.to_s
+    end
     if @id == nil
-      alt_phone = []
-      @phone_number.each do |obj|
-        alt_phone << obj.to_s
-      end
       sql = "INSERT INTO contacts(first_name, last_name, email, phone_number) VALUES ($1, $2, $3, $4) RETURNING *"
       results = ContactDatabase.connection.exec_params(sql, [@first_name, @last_name, @email, alt_phone.join(',')])
       @id = results[0]["id"]
       puts 'saved'
     else
       sql = "UPDATE contacts SET first_name = $1, last_name = $2, email = $3, phone_number = $4 WHERE id=$5"
-      ContactDatabase.connection.exec_params(sql, [@first_name, @last_name, @email, @phone_number, @id])
+      ContactDatabase.connection.exec_params(sql, [@first_name, @last_name, @email, alt_phone.join(','), @id])
       puts 'updated'
     end   
   end
-  
-  # def to_array
-  #   [@name, @email, @phone_number]
-  # end
+
+  def destroy
+    ContactDatabase.connection.exec_params("DELETE FROM contacts WHERE id = #{@id}")
+    puts 'DELETED'
+  end
+
+  def update(first_name, last_name, email, numbers)
+    @first_name = first_name
+    @last_name = last_name
+    @email = email
+    @phone_number = numbers
+    self.save
+  end
  
   class << self
 
