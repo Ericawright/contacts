@@ -47,23 +47,22 @@ class ContactListMenu
     def menu_select
       
       case @command
+      when 'list'
+        p Contact.all
+      when 'show'
+        p Contact.find(@second_command)
+      when 'find'
+        p Contact.find_by(first_name: @second_command)
       when 'new'
         ContactListMenu.input_for_contact
-        puts Contact.create(@temp_first_name, @temp_last_name, @temp_contact_email, @numbers)
-      when 'list'
-        puts Contact.all
-      when 'show'
-        puts Contact.show(@second_command.to_i)
-      when 'find'
-        puts Contact.find(@second_command)
+         newContact = Contact.create(first_name: @temp_first_name, last_name: @temp_last_name, email: @temp_contact_email, phone_number: @numbers)
       when 'destroy'
-        current = Contact.show(@second_command.to_i)
+        current = Contact.find_by(id: @second_command)
         current.destroy
       when 'update'
         puts current = Contact.show(@second_command.to_i)
         ContactListMenu.input_for_contact
         current.update(@temp_first_name, @temp_last_name, @temp_contact_email, @numbers)
-
       else
         puts 'invalid command'
         ContactListMenu.menu
