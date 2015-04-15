@@ -1,10 +1,4 @@
 
-require 'pg'
-
-require_relative 'contact'
-require_relative 'contact_database'
-require_relative 'phone_number'
-
 class ContactListMenu
 
   @command = ARGV[0]
@@ -18,7 +12,8 @@ class ContactListMenu
       list - List all contacts
       show - Show a contact
       find - Find a contact
-      destroy - destroy selected contact"
+      destroy - destroy selected contact
+      update - change a contact's info"
     end
     
     def get_input
@@ -77,7 +72,6 @@ class ContactListMenu
   end
 end
 
-Contact.init
-ContactListMenu.menu_select
+
 
 

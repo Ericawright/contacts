@@ -1,4 +1,5 @@
-class PhoneNumber
+class PhoneNumber < ActiveRecord::Base
+  belongs_to :contact
   attr_accessor :type, :digits
 
   def initialize(type, digits)

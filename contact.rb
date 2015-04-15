@@ -1,6 +1,5 @@
-# require 'pg'
-
-class Contact
+class Contact < ActiveRecord::Base 
+  has_many :phonenumbers
  
   attr_accessor :first_name, :last_name, :email, :phone_number, :id
   
@@ -27,7 +26,7 @@ class Contact
     end
     if @id == nil
       sql = "INSERT INTO contacts(first_name, last_name, email, phone_number) VALUES ($1, $2, $3, $4) RETURNING *"
-      results = ContactDatabase.connection.exec_params(sql, [@first_name, @last_name, @email, alt_phone.join(',')])
+      results = ContactDatabase.connection.e(sql, [@first_name, @last_name, @email, alt_phone.join(',')])
       @id = results[0]["id"]
       puts 'saved'
     else
@@ -53,8 +52,12 @@ class Contact
   class << self
 
     def init
+
+    end
+
+    def init
       @@list_of_contacts = []
-      ContactDatabase.connection.exec('SELECT * FROM contacts;').each do |row|
+      ContactDatabase.connection('SELECT * FROM contacts;').each do |row|
         id = row['id'].to_i
         first_name = row['first_name']
         last_name = row['last_name']
