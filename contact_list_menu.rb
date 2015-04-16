@@ -54,6 +54,7 @@ class ContactListMenu
       case @command
       when 'list'
         p Contact.all
+        p Contact.phone_numbers
       when 'show'
         p Contact.find(@second_command)
       when 'find'
