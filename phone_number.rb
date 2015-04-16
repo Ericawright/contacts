@@ -1,5 +1,6 @@
 class PhoneNumber < ActiveRecord::Base
-  belongs_to :contact
+  belongs_to :contact, dependent: :destroy
+end
   # attr_accessor :type, :digits
 
   # def initialize(type, digits)
@@ -11,4 +12,3 @@ class PhoneNumber < ActiveRecord::Base
   #   " #{@type}: #{@digits}"
   # end
 
-end

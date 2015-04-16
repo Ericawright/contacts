@@ -3,6 +3,8 @@ class ContactListMenu
 
   @command = ARGV[0]
   @second_command = ARGV[1]
+  @third_command = ARGV[2]
+  @fourth_command =  ARGV[3]
 
   class << self
 
@@ -21,13 +23,16 @@ class ContactListMenu
     end
 
     def input_for_contact
-      @numbers = []
       puts "What is the contact's first name?"
-      @temp_first_name = self.get_input
+      @temp_first_name = self.get_input.downcase
       puts "What is the contact's last name?"
-      @temp_last_name = self.get_input
+      @temp_last_name = self.get_input.downcase
       puts "What is the contact's email?"
-      @temp_contact_email = self.get_input
+      @temp_contact_email = self.get_input.downcase
+    end
+
+    def input_for_phone_number
+      @numbers = []
       begin
         puts 'Do you want to enter a phone number? (y/n)'
         if STDIN.gets.chomp.downcase == 'y'
@@ -36,13 +41,13 @@ class ContactListMenu
           type = STDIN.gets.chomp
           puts 'Enter the number'
           digits = STDIN.gets.chomp
-          @numbers << PhoneNumber.new(type, digits)
+          @numbers << @current.phone_numbers.new(phone_type: type, number: digits)
         else
           phone = false
         end
       end while phone == true
+      @numbers.each {|obj| obj.save}
     end
-
 
     def menu_select
       
@@ -52,17 +57,18 @@ class ContactListMenu
       when 'show'
         p Contact.find(@second_command)
       when 'find'
-        p Contact.find_by(first_name: @second_command)
+        p Contact.find_by(@second_command.to_sym => @third_command.downcase)
       when 'new'
         ContactListMenu.input_for_contact
-         newContact = Contact.create(first_name: @temp_first_name, last_name: @temp_last_name, email: @temp_contact_email, phone_number: @numbers)
+        @current = Contact.new(first_name: @temp_first_name, last_name: @temp_last_name, email: @temp_contact_email)
+        ContactListMenu.input_for_phone_number
+        @current.save
       when 'destroy'
-        current = Contact.find_by(id: @second_command)
-        current.destroy
+        @current = Contact.find_by(id: @second_command)
+        @current.destroy
       when 'update'
-        puts current = Contact.show(@second_command.to_i)
-        ContactListMenu.input_for_contact
-        current.update(@temp_first_name, @temp_last_name, @temp_contact_email, @numbers)
+        @current = Contact.find(@second_command)
+        @current.update(@third_command.underscore.to_sym => @fourth_command)
       else
         puts 'invalid command'
         ContactListMenu.menu

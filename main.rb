@@ -16,6 +16,5 @@ ActiveRecord::Base.establish_connection(
   host: 'ec2-23-23-81-189.compute-1.amazonaws.com',
   password: 'DHOyzmtgbBoeGlTlotoRFQBvXv'
 )
-  
 
 ContactListMenu.menu_select

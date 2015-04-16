@@ -1,5 +1,6 @@
 class Contact < ActiveRecord::Base 
-  has_many :phonenumbers
+  has_many :phone_numbers
+end
  
   # attr_accessor :first_name, :last_name, :email, :phone_number, :id
   
@@ -105,6 +106,6 @@ class Contact < ActiveRecord::Base
     #   return "Contact does not exist"
     # end 
   # end
-end
+
 
 
